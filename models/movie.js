@@ -4,27 +4,27 @@ const isUrl = require('validator/lib/isURL');
 const movieSchema = new mongoose.Schema({
     country: {
         type: String,
-        require: true,
+        required: true,
     },
     director: {
         type: String,
-        require: true,
+        required: true,
     },
     duration: {
         type: Number,
-        require: true,
+        required: true,
     },
     year: {
-        type: String,
-        require: true,
+        type: Number,
+        required: true,
     },
     description: {
         type: String,
-        require: true,
+        required: true,
     },
     image: {
         type: String,
-        require: true,
+        required: true,
         validate: {
             validator: (url) => isUrl(url),
             message: 'Неправильный адрес URL',
@@ -32,7 +32,7 @@ const movieSchema = new mongoose.Schema({
     },
     trailerLink: {
         type: String,
-        require: true,
+        required: true,
         validate: {
             validator: (url) => isUrl(url),
             message: 'Неправильный адрес URL',
@@ -40,28 +40,29 @@ const movieSchema = new mongoose.Schema({
     },
     thumbnail: {
         type: String,
-        require: true,
+        required: true,
         validate: {
             validator: (url) => isUrl(url),
             message: 'Неправильный адрес URL',
           },
     },
     owner: {
-        require: true,
-    },
-    movieId: {
-        type: Number,
-        require: true,
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'user',
+      },
+    // movieId: {
+    //     type: Number,
+    //     required: true,
+    // },
     nameRU: {
         type: String,
-        require: true,
+        required: true,
     },
     nameEN: {
         type: String,
-        require: true,
+        required: true,
     },
-
 });
 
 module.exports = mongoose.model('movie', movieSchema);
