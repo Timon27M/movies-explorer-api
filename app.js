@@ -1,39 +1,39 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const NotFoundError = require('./errors/NotFoundError');
-const { createUser } = require('./controllers/users');
+const cors = require('cors');
 const handlerError = require('./middlewares/handlerError');
+const routes = require('./routes/index');
 
-const routesUser = require('./routes/users');
-const routesMovie = require('./routes/movies');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, DBlink = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use((req, res, next) => {
-    req.user = {
-      _id: '64a5939d55131cf774f2a2c6' // вставьте сюда _id созданного в предыдущем пункте пользователя
-    };
-  
-    next();
-  });
+  req.user = {
+    _id: '64a5939d55131cf774f2a2c6', // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
 
-app.post('/signup', createUser);
-app.use('/', routesUser);
-app.use('/', routesMovie);
+  next();
+});
 
-app.use('/', (req, res, next) => next(new NotFoundError('Произошла ошибка: Неправильный путь')));
+app.use(requestLogger);
+app.use('/', routes);
+app.use(errorLogger);
 
 app.use(errors());
 app.use(handlerError);
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb');
+mongoose.connect(DBlink);
 
 app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`)
+  console.log(`App listening on port ${PORT}`);
 });
