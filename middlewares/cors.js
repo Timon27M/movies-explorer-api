@@ -1,7 +1,7 @@
 const allowedCors = [
   'http://localhost:3000',
-  'http://tim27.nomoreparties.sbs',
-  'https://tim27.nomoreparties.sbs',
+  'http://api.tim2772.nomoredomains.work',
+  'https://api.tim2772.nomoredomains.work',
 ];
 
 const cors = (req, res, next) => {
