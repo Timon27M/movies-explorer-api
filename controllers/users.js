@@ -18,7 +18,7 @@ const getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        return next(new NotFoundError(err.name));
+        return next(new NotFoundError('Пользователь не найден'));
       }
       return next(err);
     });
@@ -43,7 +43,10 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError(err.name));
+        return next(new BadRequestError('Переданы некорректные данные'));
+      }
+      if (err.code === 11000) {
+        return next(new IncorrectEmailError('Пользователь с таким email уже существует'));
       }
       return next(err);
     });
@@ -73,9 +76,8 @@ const createUser = (req, res, next) => {
       if (err.code === 11000) {
         return next(new IncorrectEmailError('Пользователь с таким email уже существует'));
       }
-
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError(err.name));
+        return next(new BadRequestError('Переданы некорректные данные'));
       }
       return next(err);
     });
@@ -89,10 +91,9 @@ const loginUser = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret');
       res.send({ token });
     })
-    .catch((err) => {
-      throw new UnauthorizatedError(err.message);
-    })
-    .catch(next);
+    .catch(() => {
+      next(new UnauthorizatedError('Неправильный логин или пароль'));
+    });
 };
 
 module.exports = {

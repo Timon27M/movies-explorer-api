@@ -5,8 +5,11 @@ const NotFound = require('../errors/NotFoundError');
 const Movie = require('../models/movie');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
+      if (!movies) {
+        throw new NotFound('Фильмы не найдены');
+      }
       res.send(movies);
     })
     .catch(next);
