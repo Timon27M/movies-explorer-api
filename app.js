@@ -18,14 +18,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors);
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64a5939d55131cf774f2a2c6', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-
-  next();
-});
-
 app.use(requestLogger);
 app.use(rateLimiter);
 app.use('/', routes);
