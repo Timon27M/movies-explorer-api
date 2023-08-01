@@ -51,10 +51,10 @@ const movieSchema = new mongoose.Schema({
     required: true,
     ref: 'user',
   },
-  // movieId: {
-  //     type: Number,
-  //     required: true,
-  // },
+  movieId: {
+    type: Number,
+    required: true,
+  },
   nameRU: {
     type: String,
     required: true,
