@@ -30,7 +30,7 @@ const movieSchema = new mongoose.Schema({
       message: 'Неправильный адрес URL',
     },
   },
-  trailerLink: {
+  trailer: {
     type: String,
     required: true,
     validate: {
