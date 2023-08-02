@@ -56,15 +56,15 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  const { id } = req.params;
+  const { movieId } = req.params;
 
-  Movie.findById(id)
+  Movie.findById(movieId)
     .orFail(() => {
       throw new NotFound('Фильм не найден');
     })
     .then((movie) => {
       if (movie.owner.toString() === req.user._id) {
-        return Movie.findByIdAndRemove(id)
+        return Movie.findByIdAndRemove(movieId)
           .then((item) => {
             res.send(item);
           })
