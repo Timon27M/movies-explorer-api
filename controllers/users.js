@@ -89,7 +89,7 @@ const loginUser = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'super-strong-secret');
-      res.send({ token });
+      res.send({ token, user });
     })
     .catch(() => {
       next(new UnauthorizatedError('Неправильный логин или пароль'));
