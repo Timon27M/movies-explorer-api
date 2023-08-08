@@ -66,10 +66,12 @@ const createUser = (req, res, next) => {
       password: hash,
     }))
     .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret');
       res.status(200).send({
         name: user.name,
         email: user.email,
         _id: user._id,
+        token,
       });
     })
     .catch((err) => {
